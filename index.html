@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoLearn Form</title>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <?!= include('loading'); ?>
+    <?!= include('style'); ?>
+</head>
+
+<body>
+    <form id="myForm">
+        <header>
+            <div>
+                <h3>Consultant Invoice</h3>
+                <img src="https://colearn.id/_next/static/media/colearn_logo.ff15334a.svg" alt="colearn_logo">
+            </div>
+            <hr>
+            <div>*wajib terisi</div>
+        </header>
+        <div class="bodycontent">
+            <div>
+                <label for="fname">Full Name <span>*</span></label>
+                <div>
+                    <input type="text" name="" id="fname" placeholder="your name" required>
+                    <div class="underline"></div>
+                </div>
+            </div>
+            <div>
+                <label for="email">Email <span>*</span></label>
+                <div>
+                    <input type="email" name="" id="email" placeholder="your email" required>
+                    <div class="underline"></div>
+                </div>
+            </div>
+            <div>
+                <label for="signatureCanvas">Your Signature <span>*</span></label>
+                <canvas id="signatureCanvas" width="581" height="200" style="border:1px solid #ccc;"></canvas>
+                <div>
+                    <button id="clearButton">Clear</button>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <a class="button" id="submitLink" href="<?= url ?>?page=confirmation"
+                onclick="submitForm(event); return false;">Submit</a>
+        </footer>
+        <div id="overlay" class="overlay">
+            <div class="lds-ripple"><div></div><div></div></div>
+        </div>        
+
+    </form>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script>
+    var signaturePad;
+
+    function setUpSignature() {
+        var canvas = document.getElementById('signatureCanvas');
+        function resizeCanvas() {
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+
+            if (signaturePad) {
+                // Clear the canvas and redraw
+                signaturePad.clear();
+            }
+        }
+
+        signaturePad = new SignaturePad(canvas);
+
+        window.onresize = resizeCanvas;
+        resizeCanvas();
+    }
+
+    function clearSignature(e) {
+        e.preventDefault();
+        signaturePad.clear()
+    }
+
+    function submitForm(e) {
+        e.preventDefault();  // Prevent the default anchor action temporarily
+
+        // Show overlay and spinner
+        document.getElementById('overlay').style.display = 'flex';
+
+        let userName = document.getElementById('fname').value;
+        let userEmail = document.getElementById('email').value;
+        let signatureDataURL = signaturePad.toDataURL('image/png');
+
+        google.script.run
+            .withSuccessHandler(function () {
+                // Hide overlay and spinner
+                document.getElementById('overlay').style.display = 'none';
+                // Redirect on successful processing of the form data
+                window.location.href = document.getElementById('submitLink').getAttribute('href');
+            })
+            .withFailureHandler(function (error) {
+                // Hide overlay and spinner
+                document.getElementById('overlay').style.display = 'none';
+                console.error('Failed to submit the form:', error);
+                alert('Failed to submit the form. Please try again.');
+            })
+            .processFormData(userName, userEmail, signatureDataURL);
+    }
+    document.getElementById("clearButton").addEventListener("click", clearSignature);
+    document.addEventListener("DOMContentLoaded", setUpSignature);
+</script>
+
+
+</html>

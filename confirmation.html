@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoLearn Form</title>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <style>
+        *,
+        :after,
+        :before {
+            box-sizing: border-box;
+            margin: 0;
+            border-radius: .5rem;
+            border: 0 solid #e5e7eb;
+        }
+
+
+        body {
+            overflow-x: hidden;
+            height: 100vh;
+            width: 100%;
+            font-family: Poppins, sans-serif;
+            background: #e1e9ff;
+            color: #2e2e2e;
+        }
+
+        form {
+            display: flex;
+            padding: 12px 15px;
+            flex-direction: column;
+            row-gap: 1rem;
+        }
+
+        header {
+            width: 100%;
+            height: 100%;
+            border-top: 10px solid #1A56EB;
+            max-width: 640px;
+            background-color: #ffff;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        header>div:first-child{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        header h3{
+            font-size: 24px;
+            font-weight: 500;
+            color: #2e2e2e;
+        }
+
+        header>div:first-child {
+            padding: 1.75rem 1.5rem;
+        }
+
+        header>div {
+            font-size: 13px;
+            padding: .4rem 1.5rem .75rem;
+        }
+
+        header a{
+            color: #153ea8;
+        }
+
+        @media screen and (max-width: 640px) {
+            body {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form id="myForm">
+        <header>
+            <div>
+                <h3>Consultant Invoice</h3>
+                <img src="https://colearn.id/_next/static/media/colearn_logo.ff15334a.svg" alt="colearn_logo">
+            </div>
+            <div>Resposemu sudah kami terima. Terimakasih</div>
+            <div><a id="resubmit" href="<?= url ?>?page=index">Submit another response</a></div>
+        </header>       
+    </form>
+</body>
+</html>
